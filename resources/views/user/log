@@ -1,0 +1,322 @@
+@extends('user.dashboard')
+@section('board')
+  <div class="row">
+
+<div class="row">
+  <div class="col-md-12">
+  <h3> {{ $transaction->name }}</h3>
+  <hr>
+  </div>
+  <div class="col-md-4">
+    <p><strong> Transaction ID</strong> {{ $transaction->tran_id }}<p>
+  </div>
+  <div class="col-md-4">
+    <p><strong> Nature of goods</strong> {{ $transaction->nature }} <p>
+  </div>
+  <div class="col-md-4">
+    <p><strong> Category</strong> Buyer <p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <p><strong> Currency</strong> {{ $transaction->currency }} <p>
+  </div>
+  <div class="col-md-4">
+    <p><strong> Amount</strong> {{ $transaction->amount }} <p>
+  </div>
+  <div class="col-md-4">
+    <p><strong> Quantity</strong> {{ $transaction->quantity }} <p>
+  </div>
+</div>
+<div class="row">
+  <div class="form-group col-md-5">
+     <label for="sel1">Description</label>
+    <textarea name="description" class="form-control" rows="2" cols="80" placeholder="Enter a brief description of your product"> {{ $transaction->description }}</textarea>
+</div>
+<div class="form-group col-md-7">
+<div class="checkbox">
+  <input class="btn btn-danger" type="reset" name="some_name" value="View Token">
+   <input class="btn btn-success" type="submit" name="some_name" value="Make Payments">
+</div>
+</div>
+</div>
+
+
+<div class="row">
+<form >
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<button type="button" onclick="payWithPaystack()"> Pay </button>
+</form>
+
+<script>
+function payWithPaystack(){
+var handler = PaystackPop.setup({
+key: 'sk_test_aeece9d20080b470b60f6bc225a5added2eb4836',
+email: 'temitopeadebayo751@yahoo.com',
+amount: 10000,
+ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+metadata: {
+custom_fields: [
+{
+    display_name: "Mobile Number",
+    variable_name: "mobile_number",
+    value: "+2348012345678"
+}
+]
+},
+callback: function(response){
+alert('success. transaction ref is ' + response.reference);
+},
+onClose: function(){
+alert('window closed');
+}
+});
+handler.openIframe();
+}
+</script>
+
+</div>
+</div>
+@endsection
+Participant the last batch of certification yearbook will be sent on Tuesday 31st for printing. if you are yet to register , pls do so on or before Tuesday 31st
+
+The last batch of certification yearbook will be sent on Tuesday 31st for printing. if you yet register do so before Tuesday 31st @Prof Eyo Ita house, Marian
+
+
+@if (Auth::user()->name=$transaction->buyer)
+  <label for="sel1">Add a Seller Email</label>
+  <div class="row">
+  <div class="form-group col-md-4">
+
+     <input class="form-control input-sm" type="text" name="amount" value="">
+  </div>
+  <div class="form-group col-md-4">
+           <input class="btn btn-success btn-sm" type="submit" name="some_name" value="Submit">
+  </div>
+  </div>
+@endif
+
+@if (Auth::user()->name=$transaction->seller)
+  <label for="sel1">Add a Buyers Email</label>
+  <div class="row">
+  <div class="form-group col-md-4">
+
+     <input class="form-control input-sm" type="text" name="amount" value="">
+  </div>
+  <div class="form-group col-md-4">
+           <input class="btn btn-success btn-sm" type="submit" name="some_name" value="Submit">
+  </div>
+  </div>
+@endif
+
+
+
+
+
+Skip to content
+This repository
+
+    Pull requests
+    Issues
+    Marketplace
+    Explore
+
+    @fillzadebayo
+
+1
+0
+
+    0
+
+fillzadebayo/veever
+Code
+Issues 0
+Pull requests 0
+Projects 0
+Wiki
+Insights
+Settings
+veever/app/Http/Controllers/TransactionController.php
+8d9c70d 18 days ago
+fillzadebayo working single transaction
+158 lines (140 sloc) 3.98 KB
+
+
+<?php
+namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use App\Transaction;
+use Session;
+class TransactionController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('pages.create');
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function random($length = 16)
+     {
+        if ( ! function_exists('openssl_random_pseudo_bytes'))
+        {
+            throw new RuntimeException('OpenSSL extension is required.');
+        }
+        $bytes = openssl_random_pseudo_bytes($length * 2);
+        if ($bytes === false)
+        {
+            throw new RuntimeException('Unable to generate random string.');
+        }
+        return substr(str_replace(array('/', '+', '='), '', base64_encode($bytes)), 0, $length);
+      }
+    public function store(Request $request)
+    {
+      $this->validate($request, array(
+        'nature'=>'required',
+        'role'=>'required',
+        'amount'=>'required',
+        'currency'=>'required',
+        'quantity'=>'required',
+        'goods_name'=>'required',
+        'description'=>'required'
+      ));
+      do {
+        $token_key = $this->random(7);
+        } while (Transaction::where("token", "=", $token_key)->first() instanceof Transaction);
+      $transaction = new Transaction;
+      $transaction->tran_id = $this->random();
+      $transaction->token = $token_key;
+      $transaction->name = $request->goods_name;
+      $transaction->nature = $request->nature;
+      $transaction->amount = $request->amount;
+      $transaction->currency = $request->currency;
+      $transaction->quantity = $request->quantity;
+      $transaction->description = $request->description;
+      if ($request->role="Buyer") {
+        $transaction->buyer = "";
+        $transaction->buyer_id = "";
+        $transaction->seller =
+        $transaction->seller_id = "";
+      }else {
+        $transaction->buyer = "";
+        $transaction->buyer_id = "";
+        $transaction->seller = "";
+        $transaction->seller_id = "";
+      }
+      $transaction->save();
+      Session::flash('success', 'The Post was succesfully Edited!');
+;
+      return redirect()->route('transaction.show', $transaction->id);
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $transaction = Transaction::find($id);
+        return view('user.single')->with('transaction', $transaction);
+    }
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+      $transaction = Transaction::find($id);
+      $transaction->delete();
+      Session::flash('success', 'The Post was succesfully deleted!');
+      return redirect()->action('TransactionController@allTransaction');
+    }
+    public function newTransaction()
+    {
+      return view('user.newlist');
+    }
+    public function allTransaction()
+    {
+      $transactions = Transaction::orderBy('id','desc')->get();
+      return view('user.transactionlist')->with('transactions',$transactions);
+    }
+}
+
+    © 2017 GitHub, Inc.
+    Terms
+    Privacy
+    Security
+    Status
+    Help
+
+    Contact GitHub
+    API
+    Training
+    Shop
+    Blog
+    About
+
+
+    $transaction = new Transaction;
+    $transaction->tran_id = $this->random();
+    $transaction->token = $token_key;
+    $transaction->name = $request->goods_name;
+    $transaction->nature = $request->transaction;
+    $transaction->amount = $request->amount;
+    $transaction->quantity = $request->quantity;
+    $transaction->description = $request->description;
+    $transaction->delivery = $request->delivery;
+
+    if ($request->role=="Buyer") {
+      $transaction->buyer = Auth::user()->name;
+      $transaction->buyer_id = "";
+      $transaction->seller = $request->selleremail;
+      $transaction->seller_id = $request->sellerphone;
+    }
+    if ($request->role=="Seller") {
+      $transaction->buyer = $request->selleremail;
+      $transaction->buyer_id = $request->sellerphone;
+      $transaction->seller = Auth::user()->name;
+      $transaction->seller_id = "";
+    }

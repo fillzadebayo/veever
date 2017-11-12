@@ -2,14 +2,14 @@
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="index.html">Veeve Back Office</a>
+    <a class="navbar-brand" href="/home">Veever Back Office</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-          <a class="nav-link" href="index.html">
+          <a class="nav-link" href="/home">
             <i class="fa fa-fw fa-dashboard"></i>
             <span class="nav-link-text">Dashboard</span>
           </a>
@@ -226,6 +226,31 @@
     </div>
   </nav>
       <div class="content-wrapper">
+        @if (Session::has('success'))
+        <div class="alert alert-dismissible alert-success fade show" role="alert">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success:</strong>{{ Session::get('success') }}
+        </div>
+        @endif
+
+        @if(count($errors)>0)
+        <div class="alert alert-danger" role="alert">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>Errors:</strong>
+          <ul>
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+
+          @endforeach
+          <ul>
+        </div>
+        @endif
+        <script>
+        $(".alert-dismissible").fadeTo(2000, 500).slideUp(500, function(){
+            $(".alert-dismissible").alert('close');
+        });
+        </script>
+
         <div class="container-fluid">
           <!-- Breadcrumbs-->
           <ol class="breadcrumb">

@@ -36,10 +36,10 @@
                   <td>{{ $transaction->amount }}</td>
                   <td>{{ $transaction->quantity }}</td>
                   <td>   {!! Form::open(['method' => 'DELETE','route' => ['transaction.destroy', $transaction->id]]) !!}
-                    <a href="{{ route('transaction.edit', $transaction->id) }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
+                    <a href="{{ route('transaction.show', $transaction->id) }}" title="View this Transaction" class="btn btn-primary"><span class="fa fa-folder-open-o"></span></a>
                   </td>
                   <td>
-                      <button type="submit" class="btn btn-danger"><span class="fa fa-trash"></span></button>
+                      <button type="submit" title="Delete this Transaction" class="btn btn-danger"><span class="fa fa-trash"></span></button>
                     {{ Form::close() }}
                   </td>
 

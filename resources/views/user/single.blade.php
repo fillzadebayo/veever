@@ -1,50 +1,114 @@
 @extends('user.dashboard')
 @section('board')
-  <div class="row">
+      <div class="col-md-12 ">
+        <div class="card mx-5">
+          <div class="block">
+          <div class="card-body">
+            <h4 class="card-title"> Name: <strong> {{ $transaction->name }} </strong> </h4>
+            <div class="">
+            @if (Auth::user()->name==$transaction->buyer)
+            <button type="button" class="btn btn-primary btn-sm" onclick="payWithPaystack()"> Seller Confirmation is pending </button>
+            @else
+            <button type="button" class="btn btn-success btn-sm" onclick="payWithPaystack()"> Buyer Confirmation is pending </button>
+            @endif
+            </div>
+            <hr>
+            <h6 class="card-subtitle mb-2 text-muted"> Transaction ID <strong> {{ $transaction->tran_id }} </strong></h6>
+            <p class="card-text"> Description <strong> {{ $transaction->description }} </strong> |
+              @if (Auth::user()->name==$transaction->buyer)
+                Role <strong> Buyer </strong>
+              @else
+                Role <strong> Seller </strong>
+              @endif
 
-<div class="row">
-  <div class="col-md-12">
-  <h3> {{ $transaction->name }}</h3>
-  <hr>
-  </div>
-  <div class="col-md-4">
-    <p><strong> Transaction ID</strong> {{ $transaction->tran_id }}<p>
-  </div>
-  <div class="col-md-4">
-    <p><strong> Nature of goods</strong> {{ $transaction->nature }} <p>
-  </div>
-  <div class="col-md-4">
-    <p><strong> Category</strong> Buyer <p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-4">
-    <p><strong> Currency</strong> {{ $transaction->currency }} <p>
-  </div>
-  <div class="col-md-4">
-    <p><strong> Amount</strong> {{ $transaction->amount }} <p>
-  </div>
-  <div class="col-md-4">
-    <p><strong> Quantity</strong> {{ $transaction->quantity }} <p>
-  </div>
-</div>
-<div class="row">
-  <div class="form-group col-md-5">
-     <label for="sel1">Description</label>
-    <textarea name="description" class="form-control" rows="2" cols="80" placeholder="Enter a brief description of your product"> {{ $transaction->description }}</textarea>
-</div>
-<div class="form-group col-md-7">
-<div class="checkbox">
-  <input class="btn btn-danger" type="reset" name="some_name" value="View Token">
-   <input class="btn btn-success" type="submit" name="some_name" value="Make Payments">
-</div>
-</div>
-</div>
-<div class="row">
-<form >
-<script src="https://js.paystack.co/v1/inline.js"></script>
-<button type="button" onclick="payWithPaystack()"> Pay </button>
-</form>
+            </p>
+            <table class="table table-sm ">
+              <thead class="thead-default">
+                <tr>
+                  <th>#</th>
+                  <th> Nature </th>
+                  <td> {{ $transaction->nature }}</td>
+                  <th>Quantity</th>
+                  <td>{{ $transaction->quantity }}</td>
+
+                </tr>
+                <tr>
+                  <th>#</th>
+                  <th> Currency </th>
+                  <td> {{ $transaction->currency }}</td>
+                  <th>amount</th>
+                  <td>{{ $transaction->amount }} zG#!@U$oM9~b</td>
+
+                </tr>
+              </thead>
+
+            </table>
+            <hr>
+            <!---
+            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal">
+              modal
+            </button>
+
+            <form >
+            <script src="https://js.paystack.co/v1/inline.js"></script>
+            <button type="button" class="btn btn-danger btn-sm" onclick="payWithPaystack()"> Pay </button>
+            </form>
+-->
+
+            <!-- The Modal -->
+            <div class="modal fade" id="myModal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Transaction Token</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    <input id="token" class="form-control"  type="button" name="some_name" value="{{ $transaction->token }}">
+                    <button type="button" title="Copy info to Clipboard" class="btn btn-block btn-success" onclick="copyToClipboard('token')" name="button"><span class="fa fa-clone"></span></button>
+                  </div>
+
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- card block end-->
+        </div>
+      </div>
+@endsection
+
+<script type="text/javascript">
+function copyToClipboard(elementId) {
+
+// Create a "hidden" input
+var aux = document.createElement("input");
+
+// Assign it the value of the specified element
+aux.setAttribute("value", document.getElementById(elementId).value);
+
+// Append it to the body
+document.body.appendChild(aux);
+
+// Highlight its content
+aux.select();
+
+// Copy the highlighted text
+document.execCommand("copy");
+
+// Remove it from the body
+document.body.removeChild(aux);
+
+}
+</script>
 
 <script>
 function payWithPaystack(){
@@ -75,4 +139,3 @@ handler.openIframe();
 
 </div>
 </div>
-@endsection
