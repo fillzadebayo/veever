@@ -73,18 +73,23 @@ class TransactionController extends Controller
         $transaction->quantity = $request->quantity;
         $transaction->description = $request->description;
         $transaction->delivery = $request->delivery;
+        $transaction->payment = "false";
+        $transaction->status = "uncompleted";
+
 
         if ($request->role=="Buyer") {
-          $transaction->buyer = Auth::user()->name;
+          $transaction->buyer = Auth::user()->email;
           $transaction->buyer_id = "";
           $transaction->seller = $request->selleremail;
           $transaction->seller_id = $request->sellerphone;
+          $transaction->confirm = "BuyerISactive";
         }
-        if ($request->role=="Seller") {
+        else {
           $transaction->buyer = $request->selleremail;
           $transaction->buyer_id = $request->sellerphone;
-          $transaction->seller = Auth::user()->name;
+          $transaction->seller = Auth::user()->email;
           $transaction->seller_id = "";
+          $transaction->confirm = "SellerISactive";
         }
 
       $transaction->save();
@@ -101,7 +106,38 @@ class TransactionController extends Controller
     public function show($id)
     {
         $transaction = Transaction::find($id);
-        return view('user.single')->with('transaction', $transaction);
+        if ($transaction->buyer == Auth::user()->email) {
+            if ($transaction->payment == 'false') {
+              if ($transaction->confirm == "BuyerISactive") {
+                return view('user.singles.buyeractive')->with('transaction', $transaction);
+              }elseif ($transaction->confirm == "SellerISactive"){
+                return view('user.singles.buyeraccept')->with('transaction', $transaction);
+              }else{
+                return view('user.singles.buyerpay')->with('transaction', $transaction);
+              }
+            }elseif ($transaction->status != 'completed') {
+            return view('user.singles.buyerconfirm')->with('transaction', $transaction);
+            }else{
+            return view('user.singles')->with('transaction', $transaction);
+          }
+        }
+
+        if ($transaction->seller == Auth::user()->email) {
+            if ($transaction->payment == 'false') {
+              if ($transaction->confirm == "SellerISactive") {
+                return view('user.singles.selleractive')->with('transaction', $transaction);
+              }elseif ($transaction->confirm == "BuyerISactive"){
+              return view('user.singles.selleraccept')->with('transaction', $transaction);
+              }else{
+                return view('user.singles.sellerpay')->with('transaction', $transaction);
+              }
+            }elseif ($transaction->status != 'completed') {
+            return view('user.singles.sellerconfirm')->with('transaction', $transaction);
+            }else{
+            return view('user.singles')->with('transaction', $transaction);
+          }
+        }
+
     }
     /**
      * Show the form for editing the specified resource.
