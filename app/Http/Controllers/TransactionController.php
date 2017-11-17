@@ -58,6 +58,7 @@ class TransactionController extends Controller
         'tranname'=>'required',
         'selleremail'=>'required',
         'sellerphone'=>'required',
+        'delivery'=>'required',
         'description'=>'required'
       ));
       do {
@@ -147,7 +148,8 @@ class TransactionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $transaction = Transaction::find($id);
+        return view('user.singles.edit')->with('transaction',$transaction);
     }
     /**
      * Update the specified resource in storage.
@@ -158,7 +160,32 @@ class TransactionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $this->validate($request, array(
+        'trantype'=>'required',
+        'amount'=>'required',
+        'quantity'=>'required',
+        'tranname'=>'required',
+        'delivery'=>'required',
+        'description'=>'required'
+      ));
+
+        $transaction = Transaction::find($id);
+        $transaction->name = $request->tranname;
+        $transaction->nature = $request->trantype;
+        $transaction->amount = $request->amount;
+        $transaction->quantity = $request->quantity;
+        $transaction->description = $request->description;
+        $transaction->delivery = $request->delivery;
+
+        $transaction->save();
+        Session::flash('success', 'The Transaction has been Edited!');
+        if (Auth::user()->email == $transaction->buyer){
+        return redirect()->route('transaction.show',$transaction->id);
+      }else{
+        return redirect()->route('transaction.show',$transaction->id);
+      }
+
+
     }
     /**
      * Remove the specified resource from storage.

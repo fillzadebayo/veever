@@ -1,5 +1,6 @@
 @extends('user.dashboard')
 @section('board')
+  @section('breadcrum') View Transaction / {{ $transaction->tran_id }}@endsection
       <div class="col-md-12 ">
         <div class="card mx-5">
           <div class="block">
@@ -36,9 +37,12 @@
 
             </table>
             <hr>
-            <button type="submit" title="Edit this Transaction" class="btn btn-primary btn-sm"><span class="fa fa-pencil"></span> Edit</button>
-            <button type="submit" title="Delete this Transaction" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span> Delete</button>
-                <!---
+
+            {!! Form::open(['method' => 'DELETE','route' => ['transaction.destroy', $transaction->id]]) !!}
+                    <a href="{{ route('transaction.edit', $transaction->id) }}" title="Edit this Transaction" class="btn btn-primary btn-sm"><span class="fa fa-pencil"></span>Edit</a>
+                  <button type="submit" title="Delete this Transaction" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span> Delete</button>
+              {{ Form::close() }}
+                      <!---
             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal">
               modal
             </button>

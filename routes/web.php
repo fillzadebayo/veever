@@ -18,8 +18,8 @@ Route::get('/view', function () {
 Route::get('paywithpaypal', array('as' => 'addmoney.paywithpaypal','uses' => 'AddMoneyController@payWithPaypal',));
 
 Route::post('paypal', array('as' => 'addmoney.paypal','uses' => 'AddMoneyController@postPaymentWithpaypal',));
-Route::resource('transaction', 'TransactionController');
 Route::get('paypal', array('as' => 'payment.status','uses' => 'AddMoneyController@getPaymentStatus',));
+Route::resource('transaction', 'TransactionController');
 Route::get('newtran', array('as' => 'transaction.new', 'uses' => 'TransactionController@newTransaction',));
 Route::get('list', array('as' => 'transaction.list', 'uses' => 'TransactionController@allTransaction',));
 

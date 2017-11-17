@@ -1,5 +1,6 @@
 @extends('user.dashboard')
 @section('board')
+@section('breadcrum') View Transaction / {{ $transaction->tran_id }}@endsection
       <div class="col-md-12 ">
         <div class="card mx-5">
           <div class="block">
@@ -14,7 +15,7 @@
             <hr>
                 Role <strong> Seller </strong>
             </p>
-            <table class="table table-sm ">
+            <table class="table table-responsive ">
               <thead class="thead-default">
                 <tr>
                   <th>#</th>

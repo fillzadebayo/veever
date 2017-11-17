@@ -1,5 +1,6 @@
 @extends('user.dashboard')
 @section('board')
+@section('breadcrum') View Transaction @endsection
       <div class="col-md-12 ">
         <div class="card mx-5">
           <div class="block">
