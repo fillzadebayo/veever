@@ -62,6 +62,12 @@
               <div class="form-group col-md-6">
                  <label for="sel1">Delivery</label>
                  <input class="form-control" type="text" name="delivery" value="">
+                 <div class="input-group">
+  <span class="input-group-addon">
+    <span class="icon icon-calendar"></span>
+  </span>
+  <input type="text" value="01/01/2015" class="form-control" data-provide="datepicker" style="width: 200px;">
+</div>
 
               </div>
 

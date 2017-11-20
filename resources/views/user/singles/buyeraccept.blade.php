@@ -14,6 +14,7 @@
             <p class="card-text"> Description <strong> {{ $transaction->description }} </strong>
             <hr>
                 Role <strong> Buyer </strong>
+                {{ $role="buyer" }}
             </p>
             <table class="table table-sm ">
               <thead class="thead-default">
@@ -37,7 +38,9 @@
 
             </table>
             <hr>
+              {!! Form::model($transaction,['method' => 'POST','route' => ['transaction.confirm', $transaction->id, $role] ]) !!}
             <button type="submit" title="Confirm this Transaction" class="btn btn-primary btn-sm"><span class="fa fa-pencil"></span> Confirm  Transaction Details</button>
+            {!! Form::close()!!}
             <!-- The Modal -->
             <div class="modal fade" id="myModal">
               <div class="modal-dialog">

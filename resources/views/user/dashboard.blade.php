@@ -90,9 +90,9 @@
           </ul>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="{{ route('user.account') }}">
             <i class="fa fa-fw fa-link"></i>
-            <span class="nav-link-text">Link</span>
+            <span class="nav-link-text">Accounts</span>
           </a>
         </li>
       </ul>
@@ -225,33 +225,35 @@
       </ul>
     </div>
   </nav>
+
       <div class="content-wrapper">
-        @if (Session::has('success'))
-        <div class="alert alert-dismissible alert-success fade show" role="alert">
-          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>Success:</strong>{{ Session::get('success') }}
-        </div>
-        @endif
 
-        @if(count($errors)>0)
-        <div class="alert alert-danger" role="alert">
-          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <strong>Errors:</strong>
-          <ul>
-          @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-
-          @endforeach
-          <ul>
-        </div>
-        @endif
-        <script>
-        $(".alert-dismissible").fadeTo(2000, 500).slideUp(500, function(){
-            $(".alert-dismissible").alert('close');
-        });
-        </script>
 
         <div class="container-fluid">
+          @if (Session::has('success'))
+          <div class="alert alert-dismissible alert-success fade show" role="alert">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>Success:</strong>{{ Session::get('success') }}
+          </div>
+          @endif
+
+          @if(count($errors)>0)
+          <div class="alert alert-danger" role="alert">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Errors:</strong>
+            <ul>
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+
+            @endforeach
+            <ul>
+          </div>
+          @endif
+          <script>
+          $(".alert-dismissible").fadeTo(2000, 500).slideUp(500, function(){
+              $(".alert-dismissible").alert('close');
+          });
+          </script>
           <!-- Breadcrumbs-->
           <ol class="breadcrumb">
             <li class="breadcrumb-item">

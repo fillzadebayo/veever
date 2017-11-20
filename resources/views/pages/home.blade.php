@@ -43,11 +43,11 @@
       ================================================== -->
       <!-- Wrap the rest of the page in another container to center all the content. -->
 
-      <div class="container marketing">
+      <div class="container marketing ">
 
         <!-- Three columns of text below the carousel -->
-        <div class="row col-md-offset-1">
-          <div class="col-lg-2">
+        <div class="row ">
+          <div class="col-lg-2 md-offset-1">
             <img class="rounded-circle"
             src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
              alt="Generic placeholder image" width="140" height="140">

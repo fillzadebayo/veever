@@ -39,7 +39,7 @@
             <hr>
             <form >
             <script src="https://js.paystack.co/v1/inline.js"></script>
-            <button type="button" class="btn btn-success btn-sm" onclick="payWithPaystack()"> Pay </button>
+            <button type="button" class="btn btn-success btn-sm" onclick="payWithPaystack()"> Make Payment </button>
             </form>
             <!-- The Modal -->
             <div class="modal fade" id="myModal">

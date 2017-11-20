@@ -16,6 +16,10 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+   public function __construct()
+   {
+       $this->middleware('auth');
+   }
     public function index()
     {
         //
@@ -94,7 +98,7 @@ class TransactionController extends Controller
         }
 
       $transaction->save();
-      Session::flash('SUCCESS ', 'The Transaction has been started!');
+      Session::flash('success ', 'The Transaction has been started!');
 ;
       return redirect()->route('transaction.show', $transaction->id);
     }
@@ -209,4 +213,24 @@ class TransactionController extends Controller
       $transactions = Transaction::orderBy('id','desc')->get();
       return view('user.transactionlist')->with('transactions',$transactions);
     }
+    public function confirmTransaction($id, $role)
+    {
+
+      if($role == "buyer")
+      {
+        $transaction = Transaction::find($id);
+        $transaction->confirm = 'Active';
+        $transaction->save();
+        Session::flash('success', 'You have confirmed, Active!');
+        return redirect()->action('TransactionController@allTransaction');
+      }else
+      {
+        $transaction = Transaction::find($id);
+        $transaction->confirm = 'Active';
+        $transaction->save();
+        Session::flash('success', 'You have confirmed, Active!');
+        return redirect()->route('transaction.show',$transaction->id);
+      }
+    }
+
 }
