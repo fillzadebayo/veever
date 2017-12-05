@@ -5,7 +5,7 @@
         <div class="card mx-5">
           <div class="block">
           <div class="card-body">
-            <h5 class="card-title"> Name: <strong> {{ $transaction->name }} </strong> </h5>
+            <h6 class="card-title"> Name: <strong> {{ $transaction->name }} </strong> </h6>
             <div class="">
             <span class="btn btn-success btn-sm"> Buyer Confirmation is pending</span>
             </div>

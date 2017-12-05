@@ -24,7 +24,7 @@ Route::post('transaction/{id}/confirm/{role}', array('as' => 'transaction.confir
 Route::resource('user', 'UserController');
 Route::get('account', array('as' => 'user.account', 'uses' => 'UserController@updateView',));
 Route::post('update/user/{id}', array('as' => 'user.accountupdate', 'uses' => 'UserController@updateAccount',));
-
+Route::resource('message', 'MessageController');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

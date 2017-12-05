@@ -5,7 +5,7 @@
         <div class="card mx-5">
           <div class="block">
           <div class="card-body">
-            <h4 class="card-title"> Name: <strong> {{ $transaction->name }} </strong> </h4>
+            <h6 class="card-title"> Name: <strong> {{ $transaction->name }} </strong> </h6>
             <div class="">
           <span class="btn btn-primary btn-sm"> Transaction is Active</span>
             </div>

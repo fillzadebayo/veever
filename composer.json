@@ -13,6 +13,7 @@
         "laravelcollective/html": "^5.4.0",
         "mabiola/paystack-php-lib": "~1.0",
         "paypal/rest-api-sdk-php": "*",
+        "snowfire/beautymail": "dev-master",
         "stripe/stripe-php": "^5.3"
     },
     "require-dev": {

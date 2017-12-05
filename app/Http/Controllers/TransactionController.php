@@ -210,7 +210,8 @@ class TransactionController extends Controller
     }
     public function allTransaction()
     {
-      $transactions = Transaction::orderBy('id','desc')->get();
+
+      $transactions = Transaction::orderBy('id','desc')->Paginate(3);
       return view('user.transactionlist')->with('transactions',$transactions);
     }
     public function confirmTransaction($id, $role)
