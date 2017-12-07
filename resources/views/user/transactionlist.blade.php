@@ -6,7 +6,8 @@
           <i class="fa fa-table"></i> Transaction List</div>
         <div class="card-body">
 
-            <div class="row">  @foreach ($transactions as $transaction)
+            <div class="row">
+               @foreach ($transactions as $transaction)
               <div class="col-sm-4">
                 <div class="card">
                   <div class="card-body">

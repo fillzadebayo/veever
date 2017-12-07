@@ -25,6 +25,12 @@ Route::resource('user', 'UserController');
 Route::get('account', array('as' => 'user.account', 'uses' => 'UserController@updateView',));
 Route::post('update/user/{id}', array('as' => 'user.accountupdate', 'uses' => 'UserController@updateAccount',));
 Route::resource('message', 'MessageController');
+
+Route::post('/pay', 'PaymentController@redirectToGateway')->name('pay'); // Laravel 5.1.17 and above
+
+Route::get('/payment/callback', 'PaymentController@handleGatewayCallback');
+Route::get('/payment', 'PaymentController@sendTestview');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

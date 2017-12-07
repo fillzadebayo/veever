@@ -14,7 +14,8 @@
         "mabiola/paystack-php-lib": "~1.0",
         "paypal/rest-api-sdk-php": "*",
         "snowfire/beautymail": "dev-master",
-        "stripe/stripe-php": "^5.3"
+        "stripe/stripe-php": "^5.3",
+        "unicodeveloper/laravel-paystack": "1.0.*"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
