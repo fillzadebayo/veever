@@ -1,11 +1,21 @@
 @extends('user.dashboard')
 @section('board')
-  <div class="row">
-    <div class="card mb-1 mx-5">
+  <div class="row col-md-12">
+    <div class="card mb-1 mx-5 ">
         <div class="card-header">
           <i class="fa fa-table"></i> Transaction List</div>
         <div class="card-body">
+          @if (count($transactions)==0)
+            <div class="text-center">
+              <div class="alert alert-primary">
+                <h6><strong>Empty!!!</strong>  No Transation yet</h6>
+              </div>
+              <hr>
+              <a href="{{ URL::to('/newtran') }}" class="btn btn-danger btn-xs"> Start a new Transactions</a>
 
+            </div>
+
+        @else
             <div class="row">
                @foreach ($transactions as $transaction)
               <div class="col-sm-4">
@@ -22,14 +32,10 @@
                   </div>
                 </div>
               </div>
-  @endforeach
+            @endforeach
             </div>
 
-
-
-          <div class="text-center">
-            {!! $transactions->links();!!}
-          </div>
+        @endif
         </div>
     </div>
   </div>

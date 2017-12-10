@@ -6,6 +6,9 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use DB;
+use Mail;
 
 class RegisterController extends Controller
 {
@@ -68,4 +71,37 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+    public function register (Request $request){
+      $input = $request->all();
+      $validator = $this->validator($input);
+
+      if ($validator->passes()){
+        $user = $this->create($input)->toArray();
+        $user['link'] =str_random(30);
+        DB::table('useractivation')->insert(['user_id'=>$user['id'], 'token'=>$user['link']]);
+        Mail::send('email.activation', $user, function($message) use ($user){
+          $message->to($user['email']);
+          $message->subject('Veever - Activate Email Account');
+        });
+        return redirect()->to('login')->with('success', 'we sent activation code. Please check your mail');
+
+      }
+      return back()->with('errors', $validator->errors());
+    }
+    public function userActivation($token){
+      $check = DB::table('useractivation')->where('token',$token)->first();
+      if($check){
+        $user = User::find($check->user_id);
+        if($user->active==1){
+          return redirect()->to('login')->with('success', 'user already activated');
+        }else{
+        $user->active =1;
+        $user->save();
+        DB::table('useractivation')->where('token',$token)->delete();
+        return redirect()->to('login')->with('success', 'Token is successfull');
+      }
+
+    }return redirect()->to('login')->with('warning', 'Token is ivalid');
+
+}
 }

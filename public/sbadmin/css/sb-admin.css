@@ -9,7 +9,7 @@ html {
 
 body {
   overflow-x: hidden;
-background-image: url("{{ asset("header.jpg")}}"); }
+background: url('header.jpg'); }
 
 body.sticky-footer {
   margin-bottom: 56px; }
@@ -18,6 +18,11 @@ body.sticky-footer {
 
 body.fixed-nav {
   padding-top: 56px; }
+.transparent {
+	zoom: 1;
+	filter: alpha(opacity=50);
+	opacity: 0.5;
+}
 
 .content-wrapper {
   min-height: calc(100vh - 56px);

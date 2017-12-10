@@ -8,7 +8,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Transaction;
 use Session;
-
+use DB;
+use Mail;
 class TransactionController extends Controller
 {
     /**
@@ -88,6 +89,35 @@ class TransactionController extends Controller
           $transaction->seller = $request->selleremail;
           $transaction->seller_id = $request->sellerphone;
           $transaction->confirm = "BuyerISactive";
+          $transaction->save();
+          $data = DB::table('users')->where('email', $request->selleremail)->first();
+          if($data){
+          $data = json_decode(json_encode($data), true);
+          $data['tName'] =$transaction->name;
+          $data['tId'] =$transaction->tran_id;
+          $data['id'] =$transaction->id;
+          $data['tAmount'] =$transaction->amount;
+          $data['tQty'] =$transaction->quantity;
+          $data['tDelivery'] =$transaction->delivery;
+          $data['role'] = "seller";
+          Mail::send('email.sellermail', $data, function($message) use ($data){
+            $message->to($data['email']);
+            $message->subject('Veever - Activate confirm Transaction');
+          });
+          else{
+            $data['email']=$request->selleremail;
+            $data['tName'] =$transaction->name;
+            $data['tId'] =$transaction->tran_id;
+            $data['id'] =$transaction->id;
+            $data['tAmount'] =$transaction->amount;
+            $data['tQty'] =$transaction->quantity;
+            $data['tDelivery'] =$transaction->delivery;
+            $data['role'] = "seller";
+            Mail::send('email.newuser', $data, function($message) use ($data){
+              $message->to($data['email']);
+              $message->subject('Veever - Register your account to activate confirm this Transaction');
+
+          }
         }
         else {
           $transaction->buyer = $request->selleremail;
@@ -95,11 +125,25 @@ class TransactionController extends Controller
           $transaction->seller = Auth::user()->email;
           $transaction->seller_id = "";
           $transaction->confirm = "SellerISactive";
+          $transaction->save();
+          $data = DB::table('users')->where('email', $request->selleremail)->first();
+          $data = json_decode(json_encode($data), true);
+          $data['tName'] =$transaction->name;
+          $data['tId'] =$transaction->tran_id;
+          $data['id'] =$transaction->id;
+          $data['tAmount'] =$transaction->amount;
+          $data['tQty'] =$transaction->quantity;
+          $data['tDelivery'] =$transaction->delivery;
+          $data['role'] = "buyer";
+          Mail::send('email.buyermail', $data, function($message) use ($data){
+            $message->to($data['email']);
+            $message->subject('Veever - Activate confirm Transaction');
+              });
         }
 
-      $transaction->save();
+
       Session::flash('success ', 'The Transaction has been started!');
-;
+
       return redirect()->route('transaction.show', $transaction->id);
     }
     /**
@@ -211,8 +255,17 @@ class TransactionController extends Controller
     public function allTransaction()
     {
 
-      $transactions = Transaction::orderBy('id','desc')->Paginate(3);
-      return view('user.transactionlist')->with('transactions',$transactions);
+      $transactions =  DB::table('transactions')
+                  ->where('buyer', '=', Auth::user()->email)
+                  ->orWhere('seller','=', Auth::user()->email)
+                  ->get();
+      if(!is_null($transactions)){
+        return view('user.transactionlist')->with('transactions',$transactions);
+      }else{
+        Session::flash('empty', 'You have confirmed, Active!');
+          return view('user.transactionlist')->with('empty', 'You have confirmed, Active!');
+      }
+
     }
     public function confirmTransaction($id, $role)
     {
@@ -223,7 +276,7 @@ class TransactionController extends Controller
         $transaction->confirm = 'Active';
         $transaction->save();
         Session::flash('success', 'You have confirmed, Active!');
-        return redirect()->action('TransactionController@allTransaction');
+        return redirect()->route('transaction.show',$transaction->id);
       }else
       {
         $transaction = Transaction::find($id);

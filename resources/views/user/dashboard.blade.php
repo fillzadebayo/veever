@@ -1,5 +1,5 @@
 @include('includes.adminhead')
-<body class="fixed-nav sticky-footer bg-dark" id="page-top" background="asset('header.jpg')">
+<body class="fixed-nav sticky-footer bg-dark" id="page-top" >
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="mainNav">
     <a class="navbar-brand" href="/home">Veever Back Office</a>

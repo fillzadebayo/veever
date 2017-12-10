@@ -1,27 +1,23 @@
+@extends('layouts.uilayout')
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <title>SB Admin - Start Bootstrap Template</title>
-  <!-- Bootstrap core CSS-->
-  <link href="sbadmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Custom fonts for this template-->
-  <link href="sbadmin/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <!-- Custom styles for this template-->
-  <link href="sbadmin/css/sb-admin.css" rel="stylesheet">
-</head>
-
+@section('content')
 <body class="bg-dark">
   <div class="container">
     <div class="card card-login mx-auto mt-5">
       <div class="card-header">Login</div>
       <div class="card-body">
+        @if ($message = Session::get('success'))
+        <div class="alert alert-dismissible alert-success fade show" role="alert">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success :</strong> {{ $message }}
+        </div>
+        @endif
+        @if ($message = Session::get('warning'))
+        <div class="alert alert-dismissible alert-warning fade show" role="alert">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Warning :</strong> {{ $message }}
+        </div>
+        @endif
         <form class="form-horizontal" method="POST" action="{{ route('login') }}">
             {{ csrf_field() }}
 
@@ -84,12 +80,4 @@
       </div>
     </div>
   </div>
-  <!-- Bootstrap core JavaScript-->
-  <script src="sbadmin/vendor/jquery/jquery.min.js"></script>
-  <script src="sbadmin/vendor/popper/popper.min.js"></script>
-  <script src="sbadmin/vendor/bootstrap/js/bootstrap.min.js"></script>
-  <!-- Core plugin JavaScript-->
-  <script src="sbadmin/vendor/jquery-easing/jquery.easing.min.js"></script>
-</body>
-
-</html>
+@endsection
